@@ -8,27 +8,54 @@
 
 // console.log("Stopping");
 
+// const url =
+//   "http://api.weatherstack.com/current?access_key=e154567cd956719efad68b335652cf85&query=-52.3333,1.5833";
+
+// Weather API
+// request({ url: url, json: true }, (error, response) => {
+//   //   console.log(error);
+//   //   console.log("status code: ", response.statusCode);
+//   //   const data = JSON.parse(body);
+//   if (error) {
+//     console.log("Unable to connect to the service");
+//   } else if (response.body.error) {
+//     console.log(response.body.error.code, response.body.error.type);
+//   } else {
+//     console.log(
+//       `It is currently ${chalk.green(
+//         response.body.current.temperature
+//       )} degrees out. It feels like ${chalk.green(
+//         response.body.current.feelslike
+//       )} degrees out. The Forecast is ${chalk.yellow(
+//         response.body.current.weather_descriptions[0]
+//       )}.`
+//     );
+//   }
+// });
+
+// Geocoding API
+// Address -> Convert it into Lat & Lon -> Weather Output
+// let longitude, latitude;
+
+// const mapBoxApiUrl =
+//   "https://api.mapbox.com/geocoding/v5/mapbox.places/warwickshire.json?limit=1&access_token=pk.eyJ1IjoieWFzaGlrNzc3IiwiYSI6ImNranJqN294YjI5Ymsyc21qMTVoaW1ueDkifQ.pzsDJjdOm1-RPePegrOulw";
+
+// request({ url: mapBoxApiUrl, json: true }, (error, response) => {
+//   if (error) {
+//     console.log("Unable to fetch the co-ordinates");
+//   } else if (response.body.features.length == 0) {
+//     console.log(response.message);
+//   } else {
+//     latitude = response.body.features[0].center[1];
+//     longitude = response.body.features[0].center[0];
+//     console.log(latitude, longitude);
+//   }
+// });
+
 const chalk = require("chalk");
-const request = require("postman-request");
+const geoCode = require("./utils/geoCode.js");
 
-const url =
-  "http://api.weatherstack.com/current?access_key=e154567cd956719efad68b335652cf85&query=London&units=f";
-
-request({ url: url, json: true }, (error, response) => {
-  console.log(error);
-  console.log("status code: ", response.statusCode);
-  //   const data = JSON.parse(body);
-  if (response.statusCode === 200 && !error) {
-    console.log(
-      `It is currently ${chalk.green(
-        response.body.current.temperature
-      )} degrees out. It feels like ${chalk.green(
-        response.body.current.feelslike
-      )} degrees out. The Forecast is ${chalk.yellow(
-        response.body.current.weather_descriptions[0]
-      )}.`
-    );
-  } else {
-    console.log(response.body.error.code, response.body.error.type);
-  }
+geoCode("Warwickshire", (err, data) => {
+  if (err) console.log(err);
+  else console.log(data.latitude, data.longitude, data.location);
 });
