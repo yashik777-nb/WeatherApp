@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/yashik777-nb/WeatherApp#readme",
   "dependencies": {
-    "request": "^2.88.2"
+    "chalk": "^4.1.0",
+    "postman-request": "^2.88.1-postman.28"
   }
 }
