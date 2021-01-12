@@ -53,9 +53,42 @@
 // });
 
 const chalk = require("chalk");
+const yargs = require("yargs");
+const forecast = require("./utils/forecast.js");
 const geoCode = require("./utils/geoCode.js");
 
-geoCode("Warwickshire", (err, data) => {
-  if (err) console.log(err);
-  else console.log(data.latitude, data.longitude, data.location);
+yargs.command({
+  command: "location",
+  describe: "Weather Details of the location",
+  builder: {
+    title: {
+      describe: "Provide location",
+      demandOption: true,
+      type: "string",
+    },
+  },
+  handler(argv) {
+    geoCode(
+      argv.title,
+      (err, { latitude = 23, longitude = 23, location = "Hyderabad" }) => {
+        if (err) return console.log(err);
+
+        forecast(
+          { latitude: latitude, longitude: longitude },
+          (err, forecastData) => {
+            if (err) return console.log(err);
+
+            console.log(
+              location,
+              forecastData.forecast,
+              forecastData.temperature,
+              forecastData.feelslike
+            );
+          }
+        );
+      }
+    );
+  },
 });
+
+yargs.parse();
